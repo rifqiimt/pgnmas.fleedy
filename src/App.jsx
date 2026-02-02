@@ -15,7 +15,11 @@ import {
   Play,
   Instagram,
   Facebook,
-  User 
+  User,
+  Smartphone,
+  Zap,
+  BarChart3,
+  Globe
 } from 'lucide-react';
 
 // --- BAGIAN 1: DATA & KONFIGURASI ---
@@ -24,41 +28,64 @@ const services = [
   {
     title: "Sewa Kendaraan",
     description: "Layanan penyewaan unit kendaraan terbaru lepas kunci untuk kebutuhan operasional harian atau jangka panjang perusahaan Anda.",
-    icon: <Car size={24} className="text-[#1f4374]" />,
+    icon: <Car size={20} className="text-[#1f4374]" />,
   },
   {
-    title: "Sewa Kendaraan dengan Supir",
+    title: "Sewa dengan Supir",
     description: "Paket penyewaan lengkap dengan pengemudi profesional yang terlatih, bersertifikasi, dan berpengalaman.",
-    icon: <User size={24} className="text-[#1f4374]" />,
+    icon: <User size={20} className="text-[#1f4374]" />,
   },
   {
     title: "Fleet Management",
     description: "Solusi lengkap mencakup administrasi handal, bengkel resmi, kartu BBM Pertamina nasional, driver bersertifikasi, serta opsi converter kit.",
-    icon: <MapPin size={24} className="text-[#1f4374]" />,
+    icon: <MapPin size={20} className="text-[#1f4374]" />,
   },
 ];
 
+// Icon color di sini di-set default, nanti di-override di komponen WhyUsSection
 const features = [
   {
     title: "Asuransi All-Risk",
     description: "Perlindungan menyeluruh untuk setiap unit kendaraan.",
-    icon: <ShieldCheck size={32} className="text-white" />,
+    icon: <ShieldCheck size={28} />,
   },
   {
     title: "Servis Berkala",
     description: "Jadwal servis rutin di bengkel resmi.",
-    icon: <Wrench size={32} className="text-white" />,
+    icon: <Wrench size={28} />,
   },
   {
     title: "Toolkit Lengkap",
     description: "Setiap unit dilengkapi peralatan darurat standar.",
-    icon: <Car size={32} className="text-white" />,
+    icon: <Car size={28} />,
   },
   {
     title: "Dokumen Lengkap",
     description: "Jaminan kelengkapan surat-surat kendaraan.",
-    icon: <FileText size={32} className="text-white" />,
+    icon: <FileText size={28} />,
   },
+];
+
+const stats = [
+  { value: "964", label: "Total Unit Aset" },
+  { value: "153 M", label: "Pendapatan (IDR)" },
+  { value: "12+", label: "Lelang Diikuti" },
+  { value: "5", label: "Kemenangan Tender" },
+];
+
+const clients = [
+  { name: "SKK Migas", logo: "skk.png" },
+  { name: "Pertamina", logo: "pertamina.png" },
+  { name: "Pertagas", logo: "pertagas.png" },
+  { name: "Perta Samtan", logo: "perta.jpg" },
+  { name: "EP Cepu", logo: "ep cepu.png" },
+  { name: "Patra Niaga", logo: "patra.png" },
+  { name: "Hulu Rokan", logo: "rokan.png" },
+  { name: "Nusantara Regas", logo: "nusantara.png" },
+  { name: "Pertamina Power", logo: "power.png" },
+  { name: "Hulu Energi", logo: "energi.png" },
+  { name: "TGI", logo: "tgi.png" },
+  { name: "Petrochina", logo: "petrochina.png" }
 ];
 
 // --- BAGIAN 2: KOMPONEN UI ---
@@ -77,24 +104,19 @@ const Navbar = () => {
 
   return (
     <nav className="fixed w-full bg-white/95 backdrop-blur-md z-50 shadow-sm border-b border-gray-100 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14">
           <a href="#home" onClick={(e) => handleScroll(e, 'home')} className="flex-shrink-0 flex items-center gap-2 group cursor-pointer">
-            <img 
-              src="fleedy.png" 
-              alt="PGN MAS Logo" 
-              className="h-8 w-auto object-contain" 
-            />
+            <img src="fleedy.png" alt="PGN MAS Logo" className="h-7 w-auto object-contain" />
           </a>
 
-          <div className="hidden md:flex space-x-8 items-center">
-            {['Home', 'Services', 'Why Us', 'Contact'].map((item) => (
+          <div className="hidden md:flex space-x-6 items-center">
+            {['Home', 'About', 'Services', 'Clients', 'Contact'].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase().replace(' ', '-')}`} 
                 onClick={(e) => handleScroll(e, item.toLowerCase().replace(' ', '-'))}
-                className="text-gray-600 hover:text-[#1f4374] text-sm font-medium transition relative group"
+                className="text-gray-600 hover:text-[#1f4374] text-xs lg:text-sm font-medium transition relative group"
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#1f4374] transition-all group-hover:w-full"></span>
@@ -104,7 +126,7 @@ const Navbar = () => {
 
           <div className="md:hidden flex items-center">
             <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600 hover:text-[#1f4374]">
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
@@ -113,7 +135,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white border-b border-gray-100 animate-fade-in">
           <div className="px-4 pt-2 pb-6 space-y-2">
-            {['Home', 'Services', 'Why Us', 'Contact'].map((item) => (
+            {['Home', 'About', 'Services', 'Clients', 'Contact'].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase().replace(' ', '-')}`} 
@@ -132,45 +154,87 @@ const Navbar = () => {
 
 const HeroSection = () => {
   return (
-    <section id="home" className="scroll-mt-24 relative pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden bg-[#fefefe]">
+    <section id="home" className="scroll-mt-20 relative pt-20 pb-10 lg:pt-28 lg:pb-16 overflow-hidden bg-[#fefefe]">
       <div className="absolute top-0 right-0 -z-10 opacity-10">
-        <div className="w-[500px] h-[500px] bg-[#67c7ef] rounded-full blur-[100px] translate-x-1/3 -translate-y-1/4"></div>
+        <div className="w-[400px] h-[400px] bg-[#67c7ef] rounded-full blur-[80px] translate-x-1/3 -translate-y-1/4"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full space-y-6 animate-fade-up text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full text-[#1f4374] font-semibold text-xs mx-auto">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full space-y-5 animate-fade-up text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full text-[#1f4374] font-semibold text-[10px] uppercase tracking-wider mx-auto">
             <span className="w-1.5 h-1.5 bg-[#1f4374] rounded-full animate-pulse"></span>
-            Solusi Transportasi Terpercaya
+            Manajemen Transportasi Terintegrasi
           </div>
           
-          <h1 className="text-3xl lg:text-5xl font-bold text-[#1f4374] leading-tight font-mark-pro max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-bold text-[#1f4374] leading-tight font-mark-pro max-w-3xl mx-auto">
             Your Business Partner on <span className="text-[#67c7ef]">The Road</span>
           </h1>
           
-          <div className="space-y-3 max-w-2xl mx-auto">
-            <p className="text-base text-gray-600 leading-relaxed">
-              Layanan Sewa Kendaraan dan Fleet Management profesional untuk menunjang operasional bisnis Anda.
+          <div className="space-y-2 max-w-xl mx-auto">
+            <p className="text-sm text-gray-600 leading-relaxed">
+              Layanan pengelolaan kendaraan operasional komprehensif. Terintegrasi dengan <b>Aplikasi Fleedy</b> untuk monitoring real-time dan efisiensi biaya.
             </p>
-            <p className="text-base text-gray-500">
-              Powered by <span className="font-bold text-[#1f4374]">@pgnmas</span>
+            <p className="text-xs font-bold text-gray-500">
+              Powered by <span className="text-[#1f4374]">PERMATA (PGN MAS)</span>
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 pt-2 justify-center">
             <a 
               href="#contact" 
-              className="px-6 py-2.5 bg-[#1f4374] text-white rounded-xl text-sm font-bold hover:bg-blue-900 transition flex items-center justify-center gap-2 shadow-xl shadow-blue-900/20 group cursor-pointer"
+              className="px-5 py-2 bg-[#1f4374] text-white rounded-lg text-sm font-bold hover:bg-blue-900 transition flex items-center justify-center gap-2 shadow-lg shadow-blue-900/10 group cursor-pointer"
             >
               Hubungi Kami
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </a>
             <a 
-              href="#services" 
-              className="px-6 py-2.5 bg-white text-[#1f4374] border-2 border-[#1f4374]/10 rounded-xl text-sm font-bold hover:bg-gray-50 transition cursor-pointer flex items-center justify-center"
+              href="#about" 
+              className="px-5 py-2 bg-white text-[#1f4374] border border-[#1f4374]/20 rounded-lg text-sm font-bold hover:bg-gray-50 transition cursor-pointer flex items-center justify-center"
             >
-              Lihat Katalog
+              Tentang Fleedy
             </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const AboutSection = () => {
+  return (
+    <section id="about" className="scroll-mt-14 py-10 bg-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row items-center gap-10">
+          <div className="lg:w-1/2 relative">
+             <div className="aspect-video bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe] rounded-xl border border-gray-100 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('ui.png')] bg-cover bg-center opacity-30"></div>
+                <div className="text-center z-10 p-4">
+                  <Smartphone size={48} className="text-[#1f4374] mx-auto mb-3" />
+                  <h3 className="text-lg font-bold text-[#1f4374]">Fleedy App Integration</h3>
+                  <p className="text-xs text-gray-500">GPS • Google Maps • Real Time Monitoring</p>
+                </div>
+             </div>
+          </div>
+          <div className="lg:w-1/2 space-y-4">
+            <h2 className="text-[#1f4374] text-2xl font-bold font-mark-pro leading-tight">Solusi Kendaraan Operasional <br/> Yang Efisien & Terukur</h2>
+            
+            <div className="space-y-3 text-gray-600 text-sm leading-relaxed">
+              <p>
+                <b>Fleedy</b> adalah produk unggulan dari PERMATA untuk pengelolaan kendaraan operasional secara komprehensif. Layanan kami mencakup sewa kendaraan, penyediaan pengemudi tersertifikasi, hingga manajemen BBM dan perawatan.
+              </p>
+              <p>
+                Semua layanan terintegrasi dengan <b>Aplikasi Fleedy</b> yang dilengkapi GPS dan Google Maps, membantu Anda mengelola mobilitas secara <i>real-time</i> dan <i>on-time</i>.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              {stats.map((stat, idx) => (
+                <div key={idx} className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                  <div className="text-xl font-bold text-[#1f4374]">{stat.value}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-gray-500 mt-1">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -180,23 +244,23 @@ const HeroSection = () => {
 
 const ServicesSection = () => {
   return (
-    <section id="services" className="scroll-mt-16 py-12 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-[#1f4374] text-2xl lg:text-3xl font-bold mb-3 font-mark-pro">Services</h2>
-          <p className="text-gray-500 text-sm lg:text-base max-w-xl mx-auto">
-            Kami menyediakan solusi komprehensif untuk kebutuhan mobilitas perusahaan Anda.
+    <section id="services" className="scroll-mt-14 py-10 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <h2 className="text-[#1f4374] text-2xl font-bold mb-2 font-mark-pro">Layanan Kami</h2>
+          <p className="text-gray-500 text-sm max-w-lg mx-auto">
+            Solusi komprehensif untuk kebutuhan mobilitas perusahaan BUMN, Swasta, dan Kementerian.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-5">
           {services.map((service, index) => (
-            <div key={index} className="bg-[#1f4374] p-6 rounded-xl shadow-sm border border-transparent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
+            <div key={index} className="bg-[#1f4374] p-5 rounded-xl shadow-sm border border-transparent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110">
                 {service.icon}
               </div>
-              <h3 className="text-lg font-bold text-white mb-2 font-mark-pro leading-tight">{service.title}</h3>
-              <p className="text-blue-100 text-sm leading-relaxed mb-4">
+              <h3 className="text-base font-bold text-white mb-2 font-mark-pro leading-tight">{service.title}</h3>
+              <p className="text-blue-100 text-xs leading-relaxed">
                 {service.description}
               </p>
             </div>
@@ -209,37 +273,41 @@ const ServicesSection = () => {
 
 const WhyUsSection = () => {
   return (
-    <section id="why-us" className="scroll-mt-16 py-12 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-10 items-start">
+    <section id="why-us" className="scroll-mt-14 py-12 bg-white relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
           
           <div className="lg:w-1/3 sticky top-24">
-            <h2 className="text-[#1f4374] text-2xl lg:text-3xl font-bold mb-4 font-mark-pro">Why Us?</h2>
-            <p className="text-gray-500 text-sm lg:text-base leading-relaxed mb-6">
-              Komitmen kami adalah memberikan ketenangan pikiran bagi bisnis Anda. 
-              Fokus pada bisnis inti Anda, biarkan kami yang mengurus armadanya.
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full text-[#1f4374] font-semibold text-[10px] uppercase tracking-wider mb-4">
+              <span className="w-1.5 h-1.5 bg-[#1f4374] rounded-full animate-pulse"></span>
+              Why Choose Us
+            </div>
+            <h2 className="text-[#1f4374] text-2xl md:text-3xl font-bold mb-4 font-mark-pro leading-tight">
+              Keunggulan <br/> <span className="text-[#67c7ef]">Fleedy</span>
+            </h2>
+            <p className="text-gray-500 text-sm leading-relaxed mb-6">
+              Kami beradaptasi menuju era transisi energi dengan armada kendaraan listrik (EV) dan Hybrid, serta sistem manajemen berbasis teknologi terkini untuk efisiensi maksimal.
             </p>
+            <div className="flex gap-1">
+                <div className="h-1 w-12 bg-[#1f4374] rounded-full"></div>
+                <div className="h-1 w-4 bg-[#67c7ef] rounded-full"></div>
+            </div>
           </div>
 
           <div className="lg:w-2/3 grid sm:grid-cols-2 gap-5">
             {features.map((feature, index) => (
               <div 
                 key={index} 
-                className="relative overflow-hidden group rounded-xl h-[240px] p-6 flex flex-col justify-end transition-all duration-500 hover:shadow-xl"
+                className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-[#67c7ef] hover:shadow-lg transition-all duration-300 group h-full flex flex-col"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-[#67c7ef]/20 via-transparent to-[#67c7ef]/20 border border-[#f6f6f6] rounded-xl z-0"></div>
-                <div className="absolute inset-0 bg-[#1f4374] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-
-                <div className="relative z-20 transform group-hover:-translate-y-1 transition-transform duration-500">
-                  <div className="w-10 h-10 bg-[#1f4374] rounded-lg flex items-center justify-center mb-3 group-hover:bg-white/20 backdrop-blur-sm shadow-lg">
-                    {React.cloneElement(feature.icon, { className: "text-white", size: 20 })}
-                  </div>
-                  <h3 className="text-lg font-bold text-[#1f4374] group-hover:text-white mb-1 transition-colors font-mark-pro leading-tight">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 group-hover:text-blue-100 transition-colors">
-                    {feature.description}
-                  </p>
+                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#1f4374] transition-colors duration-300">
+                  {React.cloneElement(feature.icon, { className: "text-[#1f4374] group-hover:text-white transition-colors duration-300", size: 20 })}
+                </div>
+                <h3 className="text-base font-bold text-[#1f4374] mb-2 font-mark-pro">{feature.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed flex-grow">
+                  {feature.description}
+                </p>
+                <div className="mt-4 flex items-center text-[#67c7ef] text-xs font-semibold group-hover:translate-x-1 transition-transform">
                 </div>
               </div>
             ))}
@@ -250,10 +318,33 @@ const WhyUsSection = () => {
   );
 };
 
+const ClientsSection = () => {
+  return (
+    <section id="clients" className="scroll-mt-14 py-8 bg-gray-50 border-t border-gray-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-[#1f4374] text-2xl font-bold mb-6 font-mark-pro">Dipercaya Oleh Mitra Korporasi</h2>
+        
+        {/* Logo Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 items-center">
+          {clients.map((client, index) => (
+            <div key={index} className="flex items-center justify-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-[#1f4374]/30 transition-all duration-300 group h-16">
+              <img 
+                src={client.logo} 
+                alt={`${client.name} Logo`} 
+                className="max-h-full max-w-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300 opacity-60 group-hover:opacity-100" 
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // --- Footer & CTA Gabungan ---
 const Footer = () => {
   return (
-    <footer id="contact" className="scroll-mt-16 relative pt-24 pb-6 lg:pb-7 overflow-hidden">
+    <footer id="contact" className="scroll-mt-14 relative pt-16 pb-6 overflow-hidden">
       
       {/* 1. BACKGROUND IMAGE FULL AREA */}
       <div className="absolute inset-0 z-0">
@@ -262,43 +353,41 @@ const Footer = () => {
           alt="Fleedy Background" 
           className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-black/10"></div>
       </div>
 
       <div className="relative z-10 flex flex-col h-full justify-between">
         
         {/* 2. BAGIAN CTA */}
-        <div className="text-center mb-16 px-6 animate-fade-up">
-          <h2 className="text-2xl lg:text-5xl font-bold text-white leading-tight font-mark-pro">
+        <div className="text-center mb-10 px-6 animate-fade-up">
+          <h2 className="text-xl md:text-3xl font-bold text-white leading-tight font-mark-pro">
             Ready for experience <br/> a service of fleedy?
           </h2>
         </div>
 
-        {/* 3. BAGIAN FOOTER CARD - WARNA PUTIH */}
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        {/* 3. BAGIAN FOOTER CARD */}
+        <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           
-          {/* UBAH DISINI: bg-[#1f4374] text-white -> bg-white text-gray-900 */}
-          <div className="bg-white text-gray-900 rounded-[2.5rem] p-8 lg:p-12 shadow-2xl relative">
-            <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="bg-white text-gray-900 rounded-[2rem] p-6 lg:p-10 shadow-2xl relative">
+            <div className="grid md:grid-cols-4 gap-6 mb-6">
               
               <div className="col-span-1 md:col-span-2">
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-3">
                    <div className="inline-block">
-                     {/* UBAH DISINI: Hapus brightness-0 invert agar logo berwarna asli */}
                      <img 
                        src="fleedy.png" 
                        alt="PGN MAS Logo" 
-                       className="h-8 w-auto object-contain" 
+                       className="h-6 w-auto object-contain" 
                      />
                    </div>
                 </div>
-                {/* UBAH DISINI: text-gray-300 -> text-gray-600 */}
-                <p className="text-gray-600 text-sm max-w-sm leading-relaxed">
-                  Memberikan solusi transportasi terbaik dengan standar keselamatan dan kenyamanan tertinggi untuk mitra bisnis kami.
+                <p className="text-gray-600 text-xs max-w-sm leading-relaxed">
+                  Layanan Jasa Pengelolaan Transportasi terpercaya. Hubungi kami untuk solusi armada bisnis yang efisien.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                <div className="flex flex-col sm:flex-row gap-2 mt-4">
                   <a href="https://apps.apple.com/us/app/fleedy/id1605578677" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition w-fit">
-                    <img src="ios.svg" alt="Download on the App Store" className="h-8 w-auto" />
+                    <img src="ios.png" alt="Download on the App Store" className="h-8 w-auto" />
                   </a>
                   <a href="https://play.google.com/store/apps/details?id=com.pgnmas.fleedy&hl=id" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition w-fit">
                      <img src="android.png" alt="Get it on Google Play" className="h-8 w-auto" />
@@ -307,50 +396,44 @@ const Footer = () => {
               </div>
               
               <div>
-                {/* UBAH DISINI: text-white -> text-[#1f4374] */}
-                <h4 className="font-bold text-[#1f4374] text-base mb-4 font-mark-pro">Quick Links</h4>
-                {/* UBAH DISINI: text-gray-300 -> text-gray-600, hover:text-[#1f4374] */}
-                <ul className="space-y-3 text-gray-600 text-sm">
+                <h4 className="font-bold text-[#1f4374] text-sm mb-3 font-mark-pro">Quick Links</h4>
+                <ul className="space-y-2 text-gray-600 text-xs">
                   <li><a href="#home" className="hover:text-[#1f4374] transition">Home</a></li>
-                  <li><a href="#why-us" className="hover:text-[#1f4374] transition">About Us</a></li>
+                  <li><a href="#about" className="hover:text-[#1f4374] transition">About Us</a></li>
                   <li><a href="#services" className="hover:text-[#1f4374] transition">Services</a></li>
-                  <li><a href="#contact" className="hover:text-[#1f4374] transition">Contact</a></li>
+                  <li><a href="#clients" className="hover:text-[#1f4374] transition">Clients</a></li>
                 </ul>
               </div>
 
               <div>
-                {/* UBAH DISINI: text-white -> text-[#1f4374] */}
-                <h4 className="font-bold text-[#1f4374] text-base mb-4 font-mark-pro">Contact</h4>
-                {/* UBAH DISINI: text-gray-300 -> text-gray-600 */}
-                <ul className="space-y-3 text-gray-600 text-sm">
+                <h4 className="font-bold text-[#1f4374] text-sm mb-3 font-mark-pro">Contact</h4>
+                <ul className="space-y-2 text-gray-600 text-xs">
                   <li className="flex items-center gap-2">
-                    {/* Icon sudah text-[#1f4374], tapi di code sebelumnya text-[#67c7ef]. Ubah ke #1f4374 agar kontras */}
-                    <Phone size={16} className="text-[#1f4374]" />
+                    <Phone size={14} className="text-[#1f4374]" />
                     <a href="https://api.whatsapp.com/send/?phone=6285775407472&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="hover:text-[#1f4374] transition">+62 857-7540-7472 (WA)</a>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Mail size={16} className="text-[#1f4374]" />
+                    <Mail size={14} className="text-[#1f4374]" />
                     <a href="mailto:commercial@pgnmas.co.id" className="hover:text-[#1f4374] transition">commercial@pgnmas.co.id</a>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Instagram size={16} className="text-[#1f4374]" />
+                    <Instagram size={14} className="text-[#1f4374]" />
                     <a href="https://www.instagram.com/fleedy.id/" target="_blank" rel="noopener noreferrer" className="hover:text-[#1f4374] transition">@fleedy.id</a>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Facebook size={16} className="text-[#1f4374]" />
+                    <Facebook size={14} className="text-[#1f4374]" />
                     <a href="https://www.facebook.com/p/Fleedy-100070852897394/?locale=id_ID" target="_blank" rel="noopener noreferrer" className="hover:text-[#1f4374] transition">Fleedy</a>
                   </li>
                   <li className="flex items-center gap-2">
-                    <MapPin size={16} className="text-[#1f4374]" />
+                    <MapPin size={14} className="text-[#1f4374]" />
                     <span>Jakarta, Indonesia</span>
                   </li>
                 </ul>
               </div>
             </div>
             
-            {/* UBAH DISINI: border-white/10 -> border-gray-200, text-gray-400 -> text-gray-500 */}
-            <div className="border-t border-gray-200 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">
-              <p>© 2024 PGN MAS. All rights reserved.</p>
+            <div className="border-t border-gray-200 pt-4 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] text-gray-500">
+              <p>© 2024 PERMATA (PGN MAS). All rights reserved.</p>
               <div className="flex gap-4">
                 <a href="#" className="hover:text-[#1f4374] transition">Privacy Policy</a>
                 <a href="#" className="hover:text-[#1f4374] transition">Terms of Service</a>
@@ -386,8 +469,10 @@ export default function App() {
       <Navbar />
       <main>
         <HeroSection />
+        <AboutSection />
         <ServicesSection />
         <WhyUsSection />
+        <ClientsSection />
       </main>
       <Footer />
     </div>
