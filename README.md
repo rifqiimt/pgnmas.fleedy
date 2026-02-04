@@ -1,5 +1,4 @@
 ![alt text](public/mockup.png)
-![alt text](public/mockup.png)
 
 # React + Vite
 
