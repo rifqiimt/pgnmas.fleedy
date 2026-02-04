@@ -88,7 +88,7 @@ const CLIENTS_DATA = [
   { name: "SKK Migas", logo: "skk.png" },
   { name: "Pertamina", logo: "pertamina.png" },
   { name: "Pertagas", logo: "pertagas.png" },
-  { name: "Perta Samtan", logo: "perta.jpg" },
+  { name: "Perta Samtan", logo: "perta.png" },
   { name: "EP Cepu", logo: "ep cepu.png" },
   { name: "Patra Niaga", logo: "patra.png" },
   { name: "Hulu Rokan", logo: "rokan.png" },
