@@ -33,8 +33,11 @@ const RevealOnScroll = ({ children, className = "", delay = 0 }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Efek aktif setiap kali elemen masuk ke layar
-        setIsVisible(entry.isIntersecting);
+        // Efek hanya aktif SEKALI saat elemen masuk ke layar
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target); // Berhenti memantau setelah muncul agar tidak berulang
+        }
       },
       {
         threshold: 0.1, 
